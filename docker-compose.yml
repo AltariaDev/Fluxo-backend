@@ -1,0 +1,34 @@
+services:
+  mongodb:
+    image: mongo:5
+    restart: always
+    container_name: sherpapp-mongodb
+    environment:
+      # Usamos variables definidas en el archivo .env
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+    volumes:
+      - ./mongo:/data/db
+    networks:
+      - internal_network
+    # Exponemos el puerto solo en localhost para mayor seguridad.
+    command: --bind_ip 127.0.0.1
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  redis:
+    image: redis:6-alpine
+    restart: always
+    container_name: sherpapp-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD} --bind 127.0.0.1
+    volumes:
+      - ./redis_data:/data
+    networks:
+      - internal_network
+    ports:
+      - "127.0.0.1:6379:6379"
+
+networks:
+  internal_network:
+    driver: bridge
