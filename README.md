@@ -1,9 +1,9 @@
-# 🧠 SherpApp Backend
+# 🧠 Fluxo Backend
 
 **SherpApp** is a comprehensive productivity application backend that provides timer-based work sessions, task management, habit tracking, and gamification features.  
 This system serves as the API foundation for a web and mobile productivity platform centered around the Pomodoro Technique and collaborative study sessions.
 
-**For more detailed documentation, visit:** [https://deepwiki.com/Ridie-Kings/focusmate-back/](https://deepwiki.com/Ridie-Kings/focusmate-back/)
+**For more detailed documentation, visit:** 
 
 ## 🚀 Getting Started
 
@@ -21,8 +21,8 @@ Before starting, ensure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/focusmate-back.git
-cd focusmate-back
+git clone https://github.com/AltariaDev/Fluxo-backend
+cd Fluxo-backend
 ````
 
 ### 2. Install dependencies
