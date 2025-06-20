@@ -3,7 +3,7 @@
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb+srv://juanan:B5a4MyUV3KxtmP1D@cluster0.ay2g7.mongodb.net/",
+    url: "mongodb+srv://user:password@cluster0.ay2g7.mongodb.net/",
 
     // TODO Change this to your database name:
     databaseName: "fluxo",
