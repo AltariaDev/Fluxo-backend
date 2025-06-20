@@ -1,11 +1,16 @@
-// 1) Define tu userId según corresponda (ObjectId, String o Number)
-const userIdToSearch = ObjectId("");
+// 1) Define tus IDs aquí manualmente
+const userIds = [
+  ObjectId("68400d6b0db6a66ef51296df"),
+  // Puedes añadir más:
+  // ObjectId("otro_id"),
+  // "user_string_id"
+];
 
-// 2) Filtro genérico para todas las colecciones
+// 2) Filtro común por los campos `userId` o `user`
 const filtro = {
   $or: [
-    { "userId": userIdToSearch },
-    { "user": userIdToSearch }
+    { userId: { $in: userIds } },
+    { user: { $in: userIds } }
   ]
 };
 
@@ -14,20 +19,43 @@ db.getCollectionNames().forEach(collName => {
   const coll = db.getCollection(collName);
 
   if (collName === "calendars") {
-    // Para `calendar`, queremos contar los elementos de `tasks`
+    // Contar tareas dentro de `tasks`
     const pipeline = [
-      { $match: filtro },          // primero filtrar documentos que te interesan
-      { $unwind: "$tasks" },       // "despliega" cada tarea en un documento propio
-      { $count: "totalTasks" }     // cuenta cuántos documentos (tareas) hay
+      { $match: filtro },
+      { $unwind: "$tasks" },
+      { $count: "totalTasks" }
     ];
     const res = coll.aggregate(pipeline).toArray();
     const totalTasks = (res.length > 0) ? res[0].totalTasks : 0;
-    print(`★ calendar → ${totalTasks} tarea(s) encontradas en total`);
+    print(`★ ${collName} → ${totalTasks} tarea(s) encontradas`);
+  } else if (collName === "userlogs") {
+    const logs = coll.find(filtro).toArray();
+  print(`★ ${collName} → ${logs.length} doc(s) encontrados`);
+
+  logs.forEach((doc, i) => {
+    print(`\n— Documento ${i + 1} —`);
+
+    const filtrado = {};
+    Object.keys(doc).forEach(key => {
+      const val = doc[key];
+      if (
+        val !== null &&
+        val !== undefined &&
+        val !== 0 &&
+        val !== "" &&
+        !(Array.isArray(val) && val.length === 0)
+      ) {
+        filtrado[key] = val;
+      }
+    });
+
+    printjson(filtrado);
+  });
   } else {
-    // Para el resto, simplemente contamos documentos
+    // Conteo genérico
     const count = coll.countDocuments(filtro);
     if (count > 0) {
-      print(`${collName} → ${count} doc(s) encontrados`);
+      print(`★ ${collName} → ${count} doc(s) encontrados`);
     }
   }
 });

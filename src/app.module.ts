@@ -17,12 +17,10 @@ import { UsersModule } from "./users/users.module";
 import { CommonModule } from "./common/common.module";
 import { AuthModule } from "./auth/auth.module";
 import { RemindersModule } from './reminders/reminders.module';
-import { TimerModule } from './timer/timer.module';
 import { TokenBlacklistModule } from './token-black-list/token-black-list.module';
 import { DictsModule } from "./dicts/dicts.module";
 import { GamificationProfileModule } from './gamification-profile/gamification-profile.module';
 import { BadgesModule } from './badges/badges.module';
-// import { RedisModule } from "./redis/redis.module";
 import { RewardsModule } from './rewards/rewards.module';
 import { BannersModule } from './banners/banners.module';
 import { FramesModule } from './frames/frames.module';
@@ -42,7 +40,11 @@ import { EventsModule } from './events/events.module';
 import { StatsModule } from './stats/stats.module';
 import { StatsService } from './stats/stats.service';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+
 import { PomodoroTaskLinkModule } from './pomodoro-task-link/pomodoro-task-link.module';
+import { CountdownModule } from './timers/countdown/countdown.module';
+import { StopwatchModule } from './timers/stopwatch/stopwatch.module';
+import { CombinedAuthThrottleGuard } from "./common/guards/combined-auth-throttle.guard";
 
 @Module({
   imports: [
@@ -72,12 +74,10 @@ import { PomodoroTaskLinkModule } from './pomodoro-task-link/pomodoro-task-link.
     CommonModule,
     AuthModule,
     RemindersModule,
-    TimerModule,
     TokenBlacklistModule,
     DictsModule,
     GamificationProfileModule,
     BadgesModule,
-   // RedisModule,
     RewardsModule,
     BannersModule,
     FramesModule,
@@ -97,16 +97,17 @@ import { PomodoroTaskLinkModule } from './pomodoro-task-link/pomodoro-task-link.
     StatsModule,
     SubscriptionsModule,
     PomodoroTaskLinkModule,
+    CountdownModule,
+    StopwatchModule,
   ],
   controllers: [AppController, AdminController],
   providers: [
+    ThrottlerGuard,
+    JwtAuthGuard,
+    CombinedAuthThrottleGuard,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: CombinedAuthThrottleGuard,
     },
     {
       provide: APP_FILTER,

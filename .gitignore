@@ -71,7 +71,3 @@ coverage/
 test-results/
 jest-coverage/
 .nyc_output/
-
-
-redis_data/
-*.rdb
